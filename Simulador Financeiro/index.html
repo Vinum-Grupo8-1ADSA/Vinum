@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Projeto Vinum</title>
+</head>
+<body>
+        
+    </div>
+    <div style="margin-top: 5%;" class="container"><h2 class="titulo">V I N U M</h2>
+
+        Valores do vinho:
+        <input type="text" id="inp_valor_vinho">
+
+        Quantidade de vinhos:
+        <input type="text" id="inp_quantidade_vinho">
+
+        Meses que ficará conosco:
+        <input type="text" id="inp_tempo">
+
+        Deseja manter controle de seu estoque? <br> (sim ou não)
+        <input type="text" id="inp_estoque">
+        
+        <button onclick="calcularSimulacao()">Calcular</button>
+    </div>
+    
+    <div id="calc_result">
+    </div>
+
+    <div id="result_tier" class="container-tiers">
+        
+    </div>
+
+    <script>
+
+        function calcularSimulacao() {
+
+            var valorVinho = Number(inp_valor_vinho.value);
+            var quantidadeVinhos = Number(inp_quantidade_vinho.value);;
+            var tempoMeses = Number(inp_tempo.value);
+ 
+            var valorAdega = 1000;
+            var quantidadeVinhosNaAdega = 12;
+            var porcentagemLucro = 2;
+            var quantidadeAdegas = quantidadeVinhos / quantidadeVinhosNaAdega;
+
+            var valorAdegaTotal = valorAdega * quantidadeAdegas;
+            var valorLucro = valorAdegaTotal * porcentagemLucro;
+            
+            
+            var tempo1 = 12;
+            var tempo2 = 36;
+            var tempo3 = 60;
+
+            var desconto = 0;
+            var descontoPerdido = 0;
+            
+            if (tempoMeses == tempo1) {
+                valorMensalidade = valorLucro / tempo1;
+                descontoPerdido = valorMensalidade * 0.1;
+            } 
+            
+            if (tempoMeses == tempo2) {
+                var valorMensalidade = valorLucro / tempo2;
+                
+                descontoPerdido = valorMensalidade * 0.05;
+                desconto = valorMensalidade * 0.05;
+            } 
+            if (tempoMeses== tempo3 || tempoMeses>= tempo3) {
+                var valorMensalidade = valorLucro / tempo3;
+
+                desconto = valorMensalidade * 0.1;
+            }
+            
+            valorMensalidade -= desconto;
+
+            var qtdTier1 = 5;
+            var qtdTier2 = 10;
+            var qtdTier3 = 15;
+
+            var vaiTerEstoque = inp_estoque.value;
+            var pesoEstoque;
+            
+            if (vaiTerEstoque == 'sim') {
+                // vai ter estoque
+                pesoEstoque = 0.5;
+            } else if (vaiTerEstoque == 'não') {
+                // nao vai ter estoque
+                pesoEstoque = 0;
+            } else {
+                entradaInvalida = true;
+                alert('Selecione se deseja ter controle de estoque.');
+            }
+
+            // Calculo para saber que tier o usuário se encaixa
+            // Leva em consideração a quantidade de adegas que necessitará e se irá utilizar o controle de estoque.
+            var pesoTier = quantidadeAdegas + quantidadeAdegas * pesoEstoque; 
+            var tierUsuario;
+
+            if (pesoTier <= 50) {
+                tierUsuario = 'Vinum Miolo';                
+            } else if (pesoTier > 50 && pesoTier <= 100) {
+                tierUsuario = 'Vinum Castilla';
+            } else {
+                tierUsuario = 'Vinum Domaine';
+            }
+            
+            // Calcular quanto deixou de perder
+            var perda = 0.2; // Perda de 20%
+            var perdaVinho = quantidadeVinhos * perda;
+            var valorTotalVinho = quantidadeVinhos * valorVinho;
+            var perdaTotal = perdaVinho * valorVinho;
+            var valorPerdaTotal = valorTotalVinho - perdaTotal - (descontoPerdido * tempoMeses);
+            var valorInvestimento = valorMensalidade * tempoMeses;
+            
+            // Formatar saída
+            const formatarMoeda = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+                currency: 'BRL',
+            });
+
+            valorInvestimento = formatarMoeda.format(valorInvestimento);
+            valorPerdaTotal = formatarMoeda.format(valorPerdaTotal);
+            valorMensalidade = formatarMoeda.format(valorMensalidade);
+
+            calc_result.innerHTML = `<br><div id="result" class="conteiner-result"></div>`;
+            result.innerHTML =`<p>Com o investimendo de <b>${valorInvestimento}</b>, você deixará de perder:  <b>${valorPerdaTotal}</b>.</p>`;
+            console.log(pesoTier);
+
+            if (tierUsuario == 'Vinum Miolo') {
+                result_tier.innerHTML = `
+                <div class="container-tier">
+                    <div class="container-info">
+                        <span class="title-tier">Miolo</span>
+                        <span class="description-tier"></span>Para aqueles que querem economizar</span>
+                        <div class="container-price">
+                            <span class="price">${valorMensalidade}</span>
+                            <span class="by-month">por mês</span>
+                        </div>
+                        <button>Comprar</button>
+                    </div>
+                </div>
+            `;
+            }
+            
+            if (tierUsuario == 'Vinum Castilla') {
+                result_tier.innerHTML = `
+                <div class="container-tier">
+                    <div class="container-info">
+                        <span class="title-tier">Castillo</span>
+                        <span class="description-tier"></span>Para aqueles que querem economizar</span>
+                        <div class="container-price">
+                            <span class="price">${valorMensalidade}</span>
+                            <span class="by-month">por mês</span>
+                        </div>
+                        <button>Comprar</button>
+                    </div>
+                </div>
+            `;
+                
+            }
+            
+            if (tierUsuario == 'Vinum Domaine') {
+                result_tier.innerHTML = `
+                <div class="container-tier">
+                    <div class="container-info">
+                        <span class="title-tier">Domaine</span>
+                        <span class="description-tier"></span>Para aqueles que querem economizar</span>
+                        <div class="container-price">
+                            <span class="price">${valorMensalidade}</span>
+                            <span class="by-month">por mês</span>
+                        </div>
+                        <button>Comprar</button>
+                    </div>
+                </div>
+            `;
+
+            }
+        }
+            
+        
+    </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
-create database vinhosprint1;
+create database bd_vinum;
 
-use vinhosprint1;
+use bd_vinum;
 
 create table Endereco (
     idEndereco int primary key auto_increment,
