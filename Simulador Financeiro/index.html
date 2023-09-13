@@ -43,11 +43,11 @@
             var vaiTerEstoque = inp_estoque.value;
             
             // Variáveis projeto
-            var valorModulo  = 1000;
-            var qtdVinhosModulo = 12;
-            var pctgLucro = 1.2;
-            var pctgPerda = 0.2;
-            var taxaEstoque = 0;
+            var valorModulo  = 1000; // Valor do módulo individual
+            var qtdVinhosModulo = 12; // Quantidade de vinhos que cabem no módulo
+            var pctgLucro = 1.2; // Porcentagem do lucro
+            var pctgPerda = 0.2; // Porcentagem da perda
+            var taxaEstoque = 0; // Taxa, se for optado pelo estoque
 
             // Quantidade usada de módulos e o valor total, com o lucro.
             var qtdModulo = qtdVinhos / qtdVinhosModulo;
@@ -78,7 +78,6 @@
             // Calcular o valor da perda
             var qtdVinhoPerdido = qtdVinhos * pctgPerda;
             var valorPerdaVinhos = qtdVinhoPerdido * valorVinho;
-            var valorVinhoTotal = qtdVinhos * valorVinho;
 
             // Formatar saidas para o formato de moeda BRL
             const formatarMoeda = new Intl.NumberFormat('pt-BR', {
