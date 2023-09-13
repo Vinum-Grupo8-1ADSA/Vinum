@@ -55,6 +55,10 @@ button:hover {
     background-color: #3d6338;
 }
 
+#result {
+    text-align: center;
+}
+
 .container-tiers {
     width: 100%;
     display: flex;
@@ -121,4 +125,10 @@ button:hover {
        display: flex;
        align-items: center;
        justify-content: center;
+   }
+
+   .discount {
+    font-size: 25px;
+    color: #b4abb0;
+    text-decoration: line-through;
    }
