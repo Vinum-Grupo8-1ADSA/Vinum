@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Projeto Vinum</title>
+    <title>Simulador Financeiro Vinum</title>
 </head>
 <body>
         
-    </div>
     <div style="margin-top: 1%;" class="container"><h2 class="titulo">V I N U M</h2>
 
         Valores do vinho:
@@ -20,6 +19,7 @@
         Meses que ficará conosco (12, 36 ou 60 meses):
         <input type="text" id="inp_tempo">
 
+        <!-- Discutir com o grupo se isso irá permanecer, que é o uso do sensor de presença -->
         Deseja manter controle de seu estoque? <br> (sim ou não)
         <input type="text" id="inp_estoque">
         
@@ -30,106 +30,104 @@
     </div>
 
     <div id="result2" class="container-tiers">
-        
     </div>
-    
-
-    <script>
-        function calcularSimulacao() {
-            // Variáveis input
-            var valorVinho = Number(inp_valor_vinho.value);
-            var qtdVinhos = Number(inp_quantidade_vinho.value);;
-            var tempoMeses = Number(inp_tempo.value);
-            var vaiTerEstoque = inp_estoque.value;
-            
-            // Variáveis projeto
-            var valorModulo  = 1000; // Valor do módulo individual
-            var qtdVinhosModulo = 12; // Quantidade de vinhos que cabem no módulo
-            var pctgLucro = 1.2; // Porcentagem do lucro
-            var pctgPerda = 0.2; // Porcentagem da perda
-            var taxaEstoque = 0; // Taxa, se for optado pelo estoque
-
-            // Quantidade usada de módulos e o valor total, com o lucro.
-            var qtdModulo = qtdVinhos / qtdVinhosModulo;
-            var valorTotalModulos = qtdModulo * valorModulo * pctgLucro;
-            
-            // Aplicar taxa do estoque caso o cliente opte por fazer o controle do mesmo
-            if (vaiTerEstoque == 'sim') {
-                taxaEstoque = qtdModulo * 100;
-            }
-
-            // Descontos pela quantidade de meses que o cliente optou por ficar conosco
-            var desconto = 0;
-            
-            if (tempoMeses == 36) {
-                desconto = 0.08;
-            }
-            
-            if (tempoMeses == 60) {
-                desconto = 0.15;
-            }
-
-            // Calcular o valor total do investimento e o valor da mensalidade, aplicando os devidos descontos
-            var valorInvestimento = valorTotalModulos + taxaEstoque;
-            var mensalidadeSemDesconto = valorInvestimento / tempoMeses; // Valor da mensalidade sem desconto
-            valorInvestimento -= valorInvestimento * desconto;
-            var valorMensalidade = valorInvestimento / tempoMeses;
-            
-            // Calcular o valor da perda
-            var qtdVinhoPerdido = qtdVinhos * pctgPerda;
-            var valorPerdaVinhos = qtdVinhoPerdido * valorVinho;
-
-            // Formatar saidas para o formato de moeda BRL
-            const formatarMoeda = new Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-            });
-            valorInvestimento = formatarMoeda.format(valorInvestimento);
-            valorPerda = formatarMoeda.format(valorPerdaVinhos);
-            valorMensalidade = formatarMoeda.format(valorMensalidade);
-            mensalidadeSemDesconto = formatarMoeda.format(mensalidadeSemDesconto);
-
-            // Exibir resultados da simulação
-            calc_result.innerHTML = `<br><div id="result" class="conteiner-result"></div>`;
-            // result.innerHTML =`<p>Com base dos dados apresentados, <br> o investimento que você fará é de <b>${valorInvestimento}</b> em <b>${tempoMeses}</b> meses.<br> E você deixará de perder <b>${valorPerda}</b></p>`;
-            result.innerHTML =`<p id="result_p">Um em cada cinco vinhos são perdidos devido ao monitoramento precário de umidade e temperatura.<br>Com nossa solução, sua adega deixará de perder <b>${valorPerda}</b> em <b>${tempoMeses}</b> meses, apenas com o investimento de <b>${valorInvestimento}</b>.</b></p>`;
-            
-
-            if (tempoMeses == 12) {
-                result2.innerHTML = `
-                <div class="container-tier">
-                    <div class="container-info">
-                        <span class="title-tier">Mensalidade</span>
-                        <span class="description-tier"></span>Você pagará:</span>
-                        <div class="container-price">
-                            <span class="price">${valorMensalidade}</span>
-                            <span class="by-month">por mês</span>
-                        </div>
-                        <button>Cadastre sua empresa</button>
-                    </div>
-                </div>
-                `;
-            } else {
-                result2.innerHTML = `
-                <div class="container-tier">
-                    <div class="container-info">
-                        <span class="title-tier">Mensalidade</span>
-                        <span class="description-tier"></span>Você pagará:</span>
-                        <div class="container-price">
-                            <span class="discount-conteiner">
-                                <span class="price discount">${mensalidadeSemDesconto}</span>
-                                <span style="font-size: 15px" class="price">-${desconto*100}%</span>
-                            </span>
-                            <span class="price">${valorMensalidade}</span>
-                            <span class="by-month">por mês</span>
-                        </div>
-                        <button>Cadastre sua empresa</button>
-                    </div>
-                </div>
-                `;
-            }
-
-        }
-    </script>
 </body>
 </html>
+
+<script>
+    function calcularSimulacao() {
+        // Variáveis input
+        var valorVinho = Number(inp_valor_vinho.value);
+        var qtdVinhos = Number(inp_quantidade_vinho.value);;
+        var tempoMeses = Number(inp_tempo.value);
+        var vaiTerEstoque = inp_estoque.value;
+        
+        // Variáveis projeto
+        var valorModulo  = 1000; // Valor do módulo individual
+        var qtdVinhosModulo = 12; // Quantidade de vinhos que cabem no módulo
+        var pctgLucro = 1.2; // Porcentagem do lucros
+        var pctgPerda = 0.20; // Porcentagem da perda
+        var taxaEstoque = 0; // Taxa, se for optado pelo estoque
+
+        // Quantidade usada de módulos e o valor total, com o lucro.
+        var qtdModulo = qtdVinhos / qtdVinhosModulo; // o calculo está certo, apenas precisamos analisar o que acontece caso o n° de vinhos do cliente não seja múltiplo de 12, nesse caso, se o número for decimal (tipo 4,162030) aí precisa arredondar para cima e fechar um inteiro (nesse caso, viraria 5)
+        var valorTotalModulos = qtdModulo * valorModulo * pctgLucro; // conferir se a var da porcentagem do lucro está certa, pois ela não está como porcentagem, é apenas um n° decimal
+        
+        // Aplicar taxa do estoque caso o cliente opte por fazer o controle do mesmo
+        if (vaiTerEstoque == 'sim') {
+            taxaEstoque = qtdModulo * 100;
+        } // retirar isso, senão for usar mais
+
+        // Descontos pela quantidade de meses que o cliente optou por ficar conosco
+        var desconto = 0;
+        
+        if (tempoMeses == 36) {
+            desconto = 0.08;
+        }
+        
+        if (tempoMeses == 60) {
+            desconto = 0.15;
+        }
+
+        // Calcular o valor total do investimento e o valor da mensalidade, aplicando os devidos descontos
+        var valorInvestimento = valorTotalModulos + taxaEstoque; // tirar taxa de estoque se não for ter mais
+        var mensalidadeSemDesconto = valorInvestimento / tempoMeses; // Valor da mensalidade sem desconto
+        valorInvestimento -= valorInvestimento * desconto;
+        var valorMensalidade = valorInvestimento / tempoMeses;
+        
+        // Calcular o valor da perda
+        var qtdVinhoPerdido = qtdVinhos * pctgPerda;
+        var valorPerdaVinhos = qtdVinhoPerdido * valorVinho;
+
+        // Formatar saidas para o formato de moeda BRL
+        const formatarMoeda = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+        });
+        valorInvestimento = formatarMoeda.format(valorInvestimento);
+        valorPerda = formatarMoeda.format(valorPerdaVinhos);
+        valorMensalidade = formatarMoeda.format(valorMensalidade);
+        mensalidadeSemDesconto = formatarMoeda.format(mensalidadeSemDesconto);
+
+        // Exibir resultados da simulação
+        calc_result.innerHTML = `<br><div id="result" class="conteiner-result"></div>`;
+        // result.innerHTML =`<p>Com base dos dados apresentados, <br> o investimento que você fará é de <b>${valorInvestimento}</b> em <b>${tempoMeses}</b> meses.<br> E você deixará de perder <b>${valorPerda}</b></p>`;
+        result.innerHTML =`<p id="result_p">Um em cada cinco vinhos são perdidos devido ao monitoramento precário de umidade e temperatura.<br>Com nossa solução, sua adega deixará de perder <b>${valorPerda}</b> em <b>${tempoMeses}</b> meses, apenas com o investimento de <b>${valorInvestimento}</b>.</b></p>`;
+        
+        // esse if dos 12 meses está errado, pois a var que está aqui é com desconto, mas esse if tem que ser sem desconto, além de tirar o lance do desconto
+        if (tempoMeses == 12) {
+            result2.innerHTML = `
+            <div class="container-tier">
+                <div class="container-info">
+                    <span class="title-tier">Mensalidade</span>
+                    <span class="description-tier"></span>Você pagará:</span>
+                    <div class="container-price">
+                        <span class="price">${mensalidadeSemDesconto}</span>
+                        <span class="by-month">por mês</span>
+                    </div>
+                    <button>Cadastre sua empresa</button>
+                </div>
+            </div>
+            `;
+        } else {
+            result2.innerHTML = `
+            <div class="container-tier">
+                <div class="container-info">
+                    <span class="title-tier">Mensalidade</span>
+                    <span class="description-tier"></span>Você pagará:</span>
+                    <div class="container-price">
+                        <span class="discount-conteiner">
+                            <span class="price discount">${mensalidadeSemDesconto}</span>
+                            <span style="font-size: 15px" class="price">-${desconto*100}%</span>
+                        </span>
+                        <span class="price">${valorMensalidade}</span>
+                        <span class="by-month">por mês</span>
+                    </div>
+                    <button>Cadastre sua empresa</button>
+                </div>
+            </div>
+            `;
+        }
+
+    }
+</script>
