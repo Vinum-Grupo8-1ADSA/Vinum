@@ -56,3 +56,20 @@ numEndereco int,
 complemento varchar(10),
 qtdModulos int
 );
+
+create table modulo (
+idModulo int primary key auto_increment,
+temperatura float not null,
+umidade int not null,
+horario datetime not null,
+fkProduto int not null,
+constraint fkproduto foreign key (fkProduto) references produto(idProduto),
+fkLocalizacao int not null,
+constraint fklocalizacao foreign key (fkLocalizacao) references localizacao(idLocalizacao)
+);
+
+create table historico (
+idHistorico int primary key auto_increment,
+fkModulo int not null,
+constraint fkmodulo foreign key (fkModulo) references modulo(idModulo)
+);
