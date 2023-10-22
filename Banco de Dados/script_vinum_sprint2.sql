@@ -23,7 +23,7 @@ constraint fkdistribuidora foreign key (fkDistribuidora) references distribuidor
 create table assinaturas (
 idAssinaturas int primary key auto_increment,
 duracaoMeses int,
-constraint ckduracaomeses check (duracaoMeses in (12, 36, 60)), -- mudando o check para as assinaturas
+constraint ckduracaomeses check (duracaoMeses in (12, 36, 60)),
 preco float
 );
 
@@ -36,11 +36,12 @@ fkDistribuidora int not null,
 constraint fkdistribuidoraUsuario foreign key (fkDistribuidora) references distribuidora(idDistribuidora),
 fkAssinaturas int not null,
 constraint fkassinaturas foreign key (fkAssinaturas) references assinaturas(idAssinaturas)
-); -- mudei o nome da constraint da foreign key, porque estava desencadeando em um erro(1826).
+);
 
 create table produto (
 idProduto int primary key auto_increment,
-categoriaVinho varchar(30), -- talvez precise colocar um check
+categoriaVinho varchar(30),
+constraint ckcategoriavinho check (categoriaVinho in ("Vinho Tinto", "Vinho Branco", "Vinho Rosé", "Vinho Espumante", "Vinho Licoroso")),
 marcaVinho varchar(30),
 dataSafra date,
 qtdVinho int,
@@ -75,7 +76,7 @@ insert into distribuidora(idDistribuidora, nomeFantasia, razaoSocial, CNPJ, tele
 (null, 'Empresa C','Distribuidora C ltda','00000000009501','5511900001113','contato@empresaC.com');
 
 select * from distribuidora;
-desc endereco;
+
 insert into endereco(idEndereco, fkDistribuidora, logradouro, numEndereco, complemento, CEP)values
 (null, 1,'Rua Y',501,'Conjnt 42',01001000),
 (null, 2,'Rua X',96,'Unidade 6',02405001),
@@ -83,25 +84,30 @@ insert into endereco(idEndereco, fkDistribuidora, logradouro, numEndereco, compl
 (null, 3,'Edificio U, Rua H',612,'4º Andar',04205000),
 (null, 1,'Avenida Z',333,'Unidade 4',07070000),
 (null, 2,'Rua T',567,'Conjnt 27',07265000);
-select * from endereco;
 
-desc assinaturas;
+select * from endereco;
+select * from endereco
+	join distribuidora on fkDistribuidora = idDistribuidora;
+
 insert into assinaturas values
 (null, 12, 999.99),
 (null, 36, 2399.99),
 (null, 60, 4999.99);
+
 select * from assinaturas;
 
-desc usuario;
 insert into usuario(idUsuario, nomeUser, fkDistribuidora, fkAssinaturas, email, senha) values
 (null, 'Usuario X', 1,3,'userX@empresaA.com', '!123#Aa'),
 (null, 'Usuario Y', 1,3,'userY@empresaA.com', '!321#Aa'),
 (null, 'Usuario A', 2,2,'usuarioA@empresaB.com', '7272!Bb'),
 (null, 'Usuario B', 2,2,'usuarioB@empresaB.com', '6262!Bb'),
 (null, 'Usuario 1', 3,1,'colaborador1@empresaC.com', '#s1Bc7');
-select *  from usuario;
 
-desc produto;
+select *  from usuario;
+select * from usuario
+	join distribuidora on fkDistribuidora = idDistribuidora
+    join assinaturas on fkAssinaturas = idAssinaturas;
+
 insert into produto(idProduto, fkUsuario, categoriaVinho, marcaVinho, datasafra, qtdVinho) values
 (null, 1, 'Vinho Tinto', 'Salentein', '2020-02-19', 427),
 (null, 1, 'Vinho Rosé', 'Saurus', '2019-01-22', 320),
@@ -110,9 +116,11 @@ insert into produto(idProduto, fkUsuario, categoriaVinho, marcaVinho, datasafra,
 (null, 2, 'Vinho Rosé', 'Garzon', '2017-01-09', 338),
 (null, 3, 'Vinho Branco', 'Pizzato', '2020-02-21', 142),
 (null, 3, 'Vinho Espumante', 'Ferrari', '2022-03-13', 89);
-select * from produto;
 
-desc localizacao;
+select * from produto;
+select * from produto
+	join usuario on fkUsuario = idUsuario;
+
 insert into localizacao(idLocalizacao, logradouro, numEndereco, complemento, CEP, qtdModulos)values
 (null,'Rua Y',501,'Conjnt 42',01001000, 39),
 (null,'Rua X',96,'Unidade 6',02405001, 28),
@@ -120,9 +128,9 @@ insert into localizacao(idLocalizacao, logradouro, numEndereco, complemento, CEP
 (null,'Edificio U, Rua H',612,'4º Andar',04205000, 16),
 (null,'Avenida Z',333,'Unidade 4',07070000, 19),
 (null,'Rua T',567,'Conjnt 27',07265000, 7);
+
 select * from localizacao;
 
-desc modulo;
 insert into modulo(idModulo, fkProduto, nomeModulo, temperatura, umidade, horario, fkLocalizacao)values
 (null, 01, '1º mdl esquerda',10.42, 66, '2023-10-11 09:58:30', 1),
 (null, 01, '2º mdl esquerda',10.41, 67, '2023-10-11 10:00:00', 1),
@@ -133,5 +141,13 @@ insert into modulo(idModulo, fkProduto, nomeModulo, temperatura, umidade, horari
 (null, 02, '2º mdl centro',11.42, 70, '2023-10-11 11:07:30', 1),
 (null, 02, '3º mdl centro',11.72, 68, '2023-10-11 11:09:00', 1),
 (null, 02, '4º mdl centro',11.20, 67, '2023-10-11 11:10:30', 1);
-select * from modulo;
 
+select * from modulo;
+select * from modulo
+	join produto on fkProduto = idProduto
+    join localizacao on fkLocalizacao = idLocalizacao;
+
+select * from modulo
+	join produto on fkProduto = idProduto
+    join localizacao on fkLocalizacao = idLocalizacao
+    where nomeModulo = '1º mdl esquerda';
