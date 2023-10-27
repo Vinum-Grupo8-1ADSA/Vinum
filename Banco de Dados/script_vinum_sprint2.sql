@@ -51,11 +51,10 @@ constraint fkusuario foreign key (fkUsuario) references usuario(idUsuario)
 
 create table localizacao (
 idLocalizacao int primary key auto_increment,
-CEP char(8) not null,
-logradouro varchar(50),
-numEndereco int,
-complemento varchar(10),
-qtdModulos int
+posicao varchar(75),
+qtdModulos int,
+fkEndereco int,
+constraint fkenderecolocalizacao foreign key (fkEndereco) references endereco(idEndereco)
 );
 
 create table modulo (
@@ -121,7 +120,7 @@ select * from produto;
 select * from produto
 	join usuario on fkUsuario = idUsuario;
 
-insert into localizacao(idLocalizacao, logradouro, numEndereco, complemento, CEP, qtdModulos)values
+insert into localizacao(idLocalizacao, posicao, qtdModulos, fkEndereco)values
 (null,'Rua Y',501,'Conjnt 42',01001000, 39),
 (null,'Rua X',96,'Unidade 6',02405001, 28),
 (null,'Avenida W',727,'Conjnt 31',05002000, 14),
@@ -130,6 +129,8 @@ insert into localizacao(idLocalizacao, logradouro, numEndereco, complemento, CEP
 (null,'Rua T',567,'Conjnt 27',07265000, 7);
 
 select * from localizacao;
+select * from localizacao
+	join endereco on fkEndereco = idEndereco;
 
 insert into modulo(idModulo, fkProduto, nomeModulo, temperatura, umidade, horario, fkLocalizacao)values
 (null, 01, '1º mdl esquerda',10.42, 66, '2023-10-11 09:58:30', 1),
