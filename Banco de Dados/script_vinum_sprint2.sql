@@ -52,7 +52,6 @@ constraint fkusuario foreign key (fkUsuario) references usuario(idUsuario)
 create table localizacao (
 idLocalizacao int primary key auto_increment,
 posicao varchar(75),
-qtdModulos int,
 fkEndereco int,
 constraint fkenderecolocalizacao foreign key (fkEndereco) references endereco(idEndereco)
 );
@@ -119,36 +118,64 @@ insert into produto(idProduto, fkUsuario, categoriaVinho, marcaVinho, datasafra,
 select * from produto;
 select * from produto
 	join usuario on fkUsuario = idUsuario;
-
-insert into localizacao(idLocalizacao, posicao, qtdModulos, fkEndereco)values
-(null,'Rua Y',501,'Conjnt 42',01001000, 39),
-(null,'Rua X',96,'Unidade 6',02405001, 28),
-(null,'Avenida W',727,'Conjnt 31',05002000, 14),
-(null,'Edificio U, Rua H',612,'4º Andar',04205000, 16),
-(null,'Avenida Z',333,'Unidade 4',07070000, 19),
-(null,'Rua T',567,'Conjnt 27',07265000, 7);
+select * from endereco order by fkDistribuidora;
+desc localizacao;
+insert into localizacao(idLocalizacao, fkEndereco, posicao)values
+(null, 1, 'Primeiro Módulo localizado na esquerda do subsolo 1 '),
+(null, 1, 'Segundo Módulo localizado na esquerda do subsolo 1'),
+(null, 1, 'Terceiro Módulo localizado na esquerda do subsolo 1'),
+(null, 1, 'Quarto Módulo localizado na esquerda do subsolo 1'),
+(null, 1, 'Primeiro Módulo localizado na direita do subsolo 1'),
+(null, 1, 'Segundo Módulo localizado na direita do subsolo 1'),
+(null, 1, 'Terceiro Módulo localizado na direita do subsolo 1'),
+(null, 1, 'Quarto Módulo localizado na direita do subsolo 1'),
+(null, 1, 'Quinto Módulo localizado na direita do subsolo 2'),
+(null, 3, 'Primeiro Módulo localizado na esquerda do subsolo 2 '),
+(null, 3, 'Segundo Módulo localizado na esquerda do subsolo 2'),
+(null, 3, 'Terceiro Módulo localizado na esquerda do subsolo 2'),
+(null, 3, 'Quarto Módulo localizado na esquerda do subsolo 2'),
+(null, 3, 'Primeiro Módulo localizado na direita do subsolo 3'),
+(null, 3, 'Segundo Módulo localizado na direita do subsolo 3'),
+(null, 3, 'Terceiro Módulo localizado na direita do subsolo 3'),
+(null, 3, 'Quarto Módulo localizado na direita do subsolo 3'),
+(null, 3, 'Quinto Módulo localizado na direita do subsolo 3'),
+(null, 5, 'Primeiro Módulo localizado na esquerda do armazém 1 '),
+(null, 5, 'Segundo Módulo localizado na esquerda do armazém 1'),
+(null, 5, 'Terceiro Módulo localizado na esquerda do armazém 1'),
+(null, 5, 'Quarto Módulo localizado na esquerda do armazém 1'),
+(null, 5, 'Primeiro Módulo localizado na direita do armazém 1'),
+(null, 5, 'Segundo Módulo localizado na direita do armazém 1'),
+(null, 5, 'Terceiro Módulo localizado na direita do armazém 1'),
+(null, 5, 'Quarto Módulo localizado na direita do armazém 1'),
+(null, 5, 'Quinto Módulo localizado na direita do armazém 1');
 
 select * from localizacao;
 select * from localizacao
 	join endereco on fkEndereco = idEndereco;
-
+desc modulo;
 insert into modulo(idModulo, fkProduto, nomeModulo, temperatura, umidade, horario, fkLocalizacao)values
-(null, 01, '1º mdl esquerda',10.42, 66, '2023-10-11 09:58:30', 1),
-(null, 01, '2º mdl esquerda',10.41, 67, '2023-10-11 10:00:00', 1),
-(null, 01, '3º mdl esquerda',10.32, 67, '2023-10-11 11:01:30', 1),
-(null, 01, '4º mdl esquerda',10.31, 70, '2023-10-11 11:03:00', 1),
-(null, 01, '5º mdl esquerda',9.98, 72, '2023-10-11 11:04:30', 1),
-(null, 02, '1º mdl centro',10.01, 73, '2023-10-11 11:06:00', 1),
-(null, 02, '2º mdl centro',11.42, 70, '2023-10-11 11:07:30', 1),
-(null, 02, '3º mdl centro',11.72, 68, '2023-10-11 11:09:00', 1),
-(null, 02, '4º mdl centro',11.20, 67, '2023-10-11 11:10:30', 1);
+(null, 01, 'Módulo A',10.42, 66, '2023-10-11 09:58:30', 1),
+(null, 01, 'Módulo B',10.41, 67, '2023-10-11 10:00:00', 1),
+(null, 01, 'Módulo C',10.32, 67, '2023-10-11 11:01:30', 1),
+(null, 01, 'Módulo D',10.31, 70, '2023-10-11 11:03:00', 1),
+(null, 01, 'Módulo F',9.98, 72, '2023-10-11 11:04:30', 1),
+(null, 02, 'Módulo G',10.01, 73, '2023-10-11 11:06:00', 1),
+(null, 02, 'Módulo H',11.42, 70, '2023-10-11 11:07:30', 1),
+(null, 02, 'Módulo I',11.72, 68, '2023-10-11 11:09:00', 1),
+(null, 02, 'Módulo J',11.20, 67, '2023-10-11 11:10:30', 1),
+(null, 02, 'Módulo K',11.20, 67, '2023-10-11 11:12:00', 1);
 
 select * from modulo;
 select * from modulo
 	join produto on fkProduto = idProduto
     join localizacao on fkLocalizacao = idLocalizacao;
 
-select * from modulo
-	join produto on fkProduto = idProduto
-    join localizacao on fkLocalizacao = idLocalizacao
-    where nomeModulo = '1º mdl esquerda';
+select m.nomeModulo, m.temperatura, 
+	   m.umidade, m.horario, 
+	   p.categoriaVinho, p.marcaVinho,
+       p.dataSafra, l.posicao
+	from modulo as m
+	join produto as p on fkProduto = idProduto
+    join localizacao as l
+    on fkLocalizacao = idLocalizacao
+    where nomeModulo = 'Módulo A';
