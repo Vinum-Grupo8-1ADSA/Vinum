@@ -60,7 +60,7 @@ create table modulo (
 idModulo int primary key auto_increment,
 nomeModulo varchar(20),
 temperatura float not null,
-umidade int not null,
+umidade float not null,
 horario datetime not null,
 fkProduto int not null,
 constraint fkproduto foreign key (fkProduto) references produto(idProduto),
@@ -119,7 +119,7 @@ select * from produto;
 select * from produto
 	join usuario on fkUsuario = idUsuario;
 select * from endereco order by fkDistribuidora;
-desc localizacao;
+
 insert into localizacao(idLocalizacao, fkEndereco, posicao)values
 (null, 1, 'Primeiro Módulo localizado na esquerda do subsolo 1 '),
 (null, 1, 'Segundo Módulo localizado na esquerda do subsolo 1'),
@@ -152,7 +152,7 @@ insert into localizacao(idLocalizacao, fkEndereco, posicao)values
 select * from localizacao;
 select * from localizacao
 	join endereco on fkEndereco = idEndereco;
-desc modulo;
+
 insert into modulo(idModulo, fkProduto, nomeModulo, temperatura, umidade, horario, fkLocalizacao)values
 (null, 01, 'Módulo A',10.42, 66, '2023-10-11 09:58:30', 1),
 (null, 01, 'Módulo B',10.41, 67, '2023-10-11 10:00:00', 1),
@@ -176,6 +176,5 @@ select m.nomeModulo, m.temperatura,
        p.dataSafra, l.posicao
 	from modulo as m
 	join produto as p on fkProduto = idProduto
-    join localizacao as l
-    on fkLocalizacao = idLocalizacao
+    join localizacao as l on fkLocalizacao = idLocalizacao
     where nomeModulo = 'Módulo A';
