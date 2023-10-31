@@ -178,3 +178,7 @@ select m.nomeModulo, m.temperatura,
 	join produto as p on fkProduto = idProduto
     join localizacao as l on fkLocalizacao = idLocalizacao
     where nomeModulo = 'Módulo A';
+
+select l.posicao, e.* from localizacao as l
+	join endereco as e on fkEndereco = idEndereco
+    where idLocalizacao = 1;
