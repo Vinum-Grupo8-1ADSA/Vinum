@@ -23,7 +23,6 @@ constraint fkAssinaturas foreign key (fkAssinaturas)
 references assinaturas(idAssinaturas)
 );
 
-
 create table endereco (
 idEndereco int primary key auto_increment,
 CEP char(8) not null,
@@ -34,8 +33,6 @@ fkDistribuidora int not null,
 constraint fkdistribuidora foreign key (fkDistribuidora) 
 references distribuidora(idDistribuidora)
 );
-
-
 
 create table usuario (
 idUsuario int primary key auto_increment,
@@ -69,7 +66,6 @@ constraint fkDistribuidoraAdega foreign key (fkDistribuidora)
 references produto(fkDistribuidora)
 );
 
-
 create table sensor (
 idSensor int primary key auto_increment,
 nomeSensor varchar(20),
@@ -91,7 +87,7 @@ dtHora datetime not null,
 fkSensor int not null,
 constraint fkSensor foreign key (fkSensor)
 references sensor(idSensor));
-desc assinaturas;
+
 insert into assinaturas values
 (null, 'Miolo', 12, 999.99),
 (null, 'Castilla', 36, 2399.99),
@@ -102,17 +98,6 @@ insert into distribuidora(idDistribuidora, nomeFantasia, razaoSocial, CNPJ, tele
 (null, 'Empresa B','Distribuidora B SA','00000000009401','5511900001112','atendimento@empresab.com', 2),
 (null, 'Empresa C','Distribuidora C ltda','00000000009501','5511900001113','contato@empresaC.com', 1);
 
-select * from distribuidora;
-
-select * from distribuidora
-	join assinaturas on fkAssinaturas = idAssinaturas;
-
-
-select *  from usuario;
-select * from usuario
-	join distribuidora on fkDistribuidora = idDistribuidora
-    join assinaturas on fkAssinaturas = idAssinaturas;
-
 insert into produto(idProduto, fkDistribuidora, categoriaVinho, marcaVinho, datasafra, qtdVinho) values
 (null, 1, 'Vinho Tinto', 'Salentein', '2020-02-19', 427),
 (null, 1, 'Vinho Rosé', 'Saurus', '2019-01-22', 320),
@@ -121,11 +106,6 @@ insert into produto(idProduto, fkDistribuidora, categoriaVinho, marcaVinho, data
 (null, 2, 'Vinho Rosé', 'Garzon', '2017-01-09', 338),
 (null, 3, 'Vinho Branco', 'Pizzato', '2020-02-21', 142),
 (null, 3, 'Vinho Espumante', 'Ferrari', '2022-03-13', 89);
-
-select * from produto;
-select * from produto
-	join usuario on fkUsuario = idUsuario;
-select * from endereco order by fkDistribuidora;
 
 insert into Adega(idAdega, fkProduto, fkEndereco, fkDistribuidora )values
 (null, 1, 1,'Primeiro Módulo localizado na esquerda do subsolo 1', 1),
@@ -138,7 +118,6 @@ insert into Adega(idAdega, fkProduto, fkEndereco, fkDistribuidora )values
 (null, 2, 2,'Quarto Módulo localizado na direita do subsolo 1', 1),
 (null, 2, 2,'Quinto Módulo localizado na direita do subsolo 2', 1),
 (null, 2, 2,'Primeiro Módulo localizado na esquerda do subsolo 2', 1);
-
 
 insert into sensor(nomeSensor, fkAdega, fkProduto, fkDistribuidora)values
 ('Módulo A',1,1,1),
@@ -163,24 +142,6 @@ insert into registro(temperatura, umidade, dtHora, fkSensor)values
 (11.72, 68, '2023-10-11 11:09:00',8),
 (11.20, 67, '2023-10-11 11:10:30',9),
 (11.20, 67, '2023-10-11 11:12:00',10);
-
-select * from modulo;
-select * from modulo
-	join produto on fkProduto = idProduto
-    join localizacao on fkLocalizacao = idLocalizacao;
-
-select m.nomeModulo, m.temperatura, 
-	   m.umidade, m.horario, 
-	   p.categoriaVinho, p.marcaVinho,
-       p.dataSafra, l.posicao
-	from modulo as m
-	join produto as p on fkProduto = idProduto
-    join localizacao as l on fkLocalizacao = idLocalizacao
-    where nomeModulo = 'Módulo A';
-
-select l.posicao, e.* from localizacao as l
-	join endereco as e on fkEndereco = idEndereco
-    where idLocalizacao = 1;
     
 -- User com permição de tudo, aquele que vai ser o Servidor    
 create user 'vinumAllGrupo'@'10.18.36.100' identified by 'grupoAll';
