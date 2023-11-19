@@ -1,10 +1,10 @@
-
 create database VinumSprint3;
 
 use VinumSprint3;
 
 create table assinaturas (
 idAssinaturas int primary key auto_increment,
+nomeAssinatura varchar(50),
 duracaoMeses int,
 constraint ckduracaomeses check (duracaoMeses in (12, 36, 60)),
 preco float
@@ -17,6 +17,7 @@ razaoSocial varchar(20) not null,
 CNPJ char(14) not null unique,
 telefone varchar(15),
 email varchar(30),
+senha varchar(30),
 fkAssinaturas int not null,
 constraint fkAssinaturas foreign key (fkAssinaturas) 
 references assinaturas(idAssinaturas)
@@ -90,11 +91,11 @@ dtHora datetime not null,
 fkSensor int not null,
 constraint fkSensor foreign key (fkSensor)
 references sensor(idSensor));
-
+desc assinaturas;
 insert into assinaturas values
-(null, 12, 999.99),
-(null, 36, 2399.99),
-(null, 60, 4999.99);
+(null, 'Miolo', 12, 999.99),
+(null, 'Castilla', 36, 2399.99),
+(null, 'Domaine', 60, 4999.99);
 
 insert into distribuidora(idDistribuidora, nomeFantasia, razaoSocial, CNPJ, telefone, email, fkAssinaturas) values
 (null, 'Empresa A','Distribuidora A ltda','00000000009301','5511900001111','contato@empresaA.com', 3),
@@ -180,7 +181,7 @@ select m.nomeModulo, m.temperatura,
 select l.posicao, e.* from localizacao as l
 	join endereco as e on fkEndereco = idEndereco
     where idLocalizacao = 1;
-
+    
 -- User com permição de tudo, aquele que vai ser o Servidor    
 create user 'vinumAllGrupo'@'10.18.36.100' identified by 'grupoAll';
 grant all privileges on VinumSprint3.* to 'vinumAllGrupo'@'10.18.36.100';
@@ -195,6 +196,3 @@ flush privileges;
 create user 'vinumSelectGrupo'@'10.18.35.6' identified by 'grupoAll';
 grant select on VinumSprint3.* to 'vinumSelectGrupo'@'10.18.35.6';
 flush privileges;
-
-    
-    
