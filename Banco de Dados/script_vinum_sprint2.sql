@@ -1,7 +1,7 @@
+
 create database VinumSprint3;
 
 use VinumSprint3;
-
 
 create table assinaturas (
 idAssinaturas int primary key auto_increment,
@@ -180,3 +180,21 @@ select m.nomeModulo, m.temperatura,
 select l.posicao, e.* from localizacao as l
 	join endereco as e on fkEndereco = idEndereco
     where idLocalizacao = 1;
+
+-- User com permição de tudo, aquele que vai ser o Servidor    
+create user 'vinumAllGrupo'@'10.18.36.100' identified by 'grupoAll';
+grant all privileges on VinumSprint3.* to 'vinumAllGrupo'@'10.18.36.100';
+flush privileges;
+
+-- User com permição de Inserir dados, aquele que vai inserir os dados criados para o servidor
+create user 'vinumInsertGrupo'@'10.18.36.70' identified by 'grupoAll';
+grant insert on VinumSprint3.* to 'vinumInsertGrupo'@'10.18.36.70';
+flush privileges;
+
+-- User com permição de Exibir dados, aquele que vai fazer o select para abrir a pagina
+create user 'vinumSelectGrupo'@'10.18.35.6' identified by 'grupoAll';
+grant select on VinumSprint3.* to 'vinumSelectGrupo'@'10.18.35.6';
+flush privileges;
+
+    
+    
