@@ -107,3 +107,5 @@ flush privileges;
 create user 'vinumSelectGrupo'@'10.18.35.6' identified by 'grupoAll';
 grant select on VinumSprint3.* to 'vinumSelectGrupo'@'10.18.35.6';
 flush privileges;
+
+select * from distribuidora;
