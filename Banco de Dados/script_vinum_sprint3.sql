@@ -37,6 +37,7 @@ references distribuidora(idDistribuidora)
 create table usuario (
 idUsuario int primary key auto_increment,
 nomeUser varchar(30),
+cpf char(11),
 email varchar(50) not null,
 senha varchar(30) not null,
 fkDistribuidora int not null,
@@ -93,6 +94,29 @@ insert into assinaturas values
 (null, 'Castilla', 36, 2399.99),
 (null, 'Domaine', 60, 4999.99);
 
+insert into distribuidora (nomeFantasia, razaoSocial, CNPJ, telefone, email, senha, fkAssinaturas) values
+	('Empresa A', 'empresa A LTDA.', '01234567892023', '', '', '123456', 1);
+
+select * from distribuidora;
+
+insert into produto (categoriaVinho, marcaVinho, dataSafra, qtdVinho, fkDistribuidora) values
+	('Vinho Tinto', 'Chandon', '2021-11-20', 100, 1);
+
+select * from produto;
+
+insert into adega (posicao, fkProduto, fkDistribuidora) values
+	('Primeira adega a esquerda no subsolo', 1, 1);
+
+select * from adega;
+
+insert into sensor (nomeSensor, fkAdega, fkProduto, fkDistribuidora) values
+	('sensor A', 1, 1, 1),
+	('sensor B', 1, 1, 1),
+    ('sensor C', 1, 1, 1),
+    ('sensor D', 1, 1, 1);
+
+select * from sensor;
+
 -- User com permição de tudo, aquele que vai ser o Servidor    
 create user 'vinumAllGrupo'@'10.18.36.100' identified by 'grupoAll';
 grant all privileges on VinumSprint3.* to 'vinumAllGrupo'@'10.18.36.100';
@@ -109,3 +133,6 @@ grant select on VinumSprint3.* to 'vinumSelectGrupo'@'10.18.35.6';
 flush privileges;
 
 select * from distribuidora;
+
+truncate table registro;
+select * from registro;
