@@ -4,10 +4,10 @@ use VinumSprint3;
 
 create table assinaturas (
 idAssinaturas int primary key auto_increment,
-nomeAssinatura varchar(50),
-duracaoMeses int,
+nomePlano varchar(50) not null,
+duracaoMeses int not null,
 constraint ckduracaomeses check (duracaoMeses in (12, 36, 60)),
-preco float
+constraint cknomePlano check (nomePlano in ('Miolo', 'Castilla', 'Domaine'))
 );
 
 create table distribuidora (
@@ -16,8 +16,8 @@ nomeFantasia varchar(20) not null,
 razaoSocial varchar(20) not null,
 CNPJ char(14) not null unique,
 telefone varchar(15),
-email varchar(30),
-senha varchar(30),
+email varchar(30) not null,
+senha varchar(30) not null,
 fkAssinaturas int not null,
 constraint fkAssinaturas foreign key (fkAssinaturas) 
 references assinaturas(idAssinaturas)
@@ -46,7 +46,7 @@ constraint fkdistribuidoraUsuario foreign key (fkDistribuidora) references distr
 
 create table produto (
 idProduto int primary key auto_increment,
-categoriaVinho varchar(30),
+categoriaVinho varchar(30) not null,
 constraint ckcategoriavinho check (categoriaVinho in ("Vinho Tinto", "Vinho Branco", "Vinho Rosé", "Vinho Espumante", "Vinho Licoroso")),
 marcaVinho varchar(30),
 dataSafra date,
@@ -90,32 +90,42 @@ constraint fkSensor foreign key (fkSensor)
 references sensor(idSensor));
 
 insert into assinaturas values
-(null, 'Miolo', 12, 999.99),
-(null, 'Castilla', 36, 2399.99),
-(null, 'Domaine', 60, 4999.99);
+(null, 'Miolo', 12),
+(null, 'Castilla', 36),
+(null, 'Domaine', 60);
+
+select * from assinaturas;
 
 insert into distribuidora (nomeFantasia, razaoSocial, CNPJ, telefone, email, senha, fkAssinaturas) values
-	('Empresa A', 'empresa A LTDA.', '01234567892023', '', '', '123456', 1);
+	('Empresa A', 'empresa A LTDA.', '01234567892023', '', 'empresaA@gmail.com', '123456', 1),
+    ('Empresa B', 'empresa B LTDA.', '01234567892024', '11911223344', 'empresaB@gmail.com', '123456', 3);
+    
 
 select * from distribuidora;
 
 insert into produto (categoriaVinho, marcaVinho, dataSafra, qtdVinho, fkDistribuidora) values
-	('Vinho Tinto', 'Chandon', '2021-11-20', 100, 1);
+	('Vinho Tinto', 'Chandon', '2021-11-20', 100, 1),
+    ('Vinho Rosé', 'Jonas', '2022-10-26', 80, 2);
 
 select * from produto;
 
 insert into adega (posicao, fkProduto, fkDistribuidora) values
-	('Primeira adega a esquerda no subsolo', 1, 1);
-
+	('Primeira adega a esquerda no subsolo', 1, 1),
+	('Não existe', 2, 2);
 select * from adega;
 
 insert into sensor (nomeSensor, fkAdega, fkProduto, fkDistribuidora) values
 	('sensor A', 1, 1, 1),
 	('sensor B', 1, 1, 1),
     ('sensor C', 1, 1, 1),
-    ('sensor D', 1, 1, 1);
+    ('sensor D', 1, 1, 1),
+    ('sensor A', 2, 2, 2),
+	('sensor B', 2, 2, 2),
+    ('sensor C', 2, 2, 2),
+    ('sensor D', 2, 2, 2);
 
 select * from sensor;
+
 
 -- User com permição de tudo, aquele que vai ser o Servidor    
 create user 'vinumAllGrupo'@'10.18.36.100' identified by 'grupoAll';
