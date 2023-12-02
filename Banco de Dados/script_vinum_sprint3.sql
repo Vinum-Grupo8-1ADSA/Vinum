@@ -118,18 +118,44 @@ insert into sensor (nomeSensor, fkAdega, fkProduto, fkDistribuidora) values
 	('sensor A', 1, 1, 1),
 	('sensor B', 1, 1, 1),
     ('sensor C', 1, 1, 1),
-    ('sensor D', 1, 1, 1),
     ('sensor A', 2, 2, 2),
 	('sensor B', 2, 2, 2),
-    ('sensor C', 2, 2, 2),
-    ('sensor D', 2, 2, 2);
+    ('sensor C', 2, 2, 2);
 
 select * from sensor;
 
+select *
+from sensor
+join distribuidora on fkDistribuidora = idDistribuidora;
+
+select
+            temperatura, 
+            umidade,
+            dtHora,
+            DATE_FORMAT(dtHora,'%H:%i:%s') as momento_grafico
+        from registro
+        join sensor on fkSensor = idSensor
+        where fkSensor = 1 and fkDistribuidora = 2
+        order by idRegistro desc limit 7;
+
+insert into registro (temperatura, umidade, dtHora, fkSensor) values
+	(10.01, 36, now(), 1);
+
+insert into registro (temperatura, umidade, dtHora, fkSensor) values
+	(30, 20, now(), 2);
+
+insert into registro (temperatura, umidade, dtHora, fkSensor) values
+	(30, 20, now(), 5);
+
+select * from registro;
 
 -- User com permição de tudo, aquele que vai ser o Servidor    
 create user 'vinumAllGrupo'@'10.18.36.100' identified by 'grupoAll';
 grant all privileges on VinumSprint3.* to 'vinumAllGrupo'@'10.18.36.100';
+flush privileges;
+
+create user 'vinumAllGrupoLocal'@'localhost' identified by 'grupoAll';
+grant all privileges on VinumSprint3.* to 'vinumAllGrupoLocal'@'localhost';
 flush privileges;
 
 -- User com permição de Inserir dados, aquele que vai inserir os dados criados para o servidor
