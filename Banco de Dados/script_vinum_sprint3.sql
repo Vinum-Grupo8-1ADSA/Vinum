@@ -124,6 +124,11 @@ insert into sensor (nomeSensor, fkAdega, fkProduto, fkDistribuidora) values
 
 select * from sensor;
 
+insert into registro (temperatura, umidade, dtHora, fkSensor) values
+	(8, 72, now(), 1),
+    (8, 76, now(), 2),
+    (8, 80, now(), 3);
+
 select *
 from sensor
 join distribuidora on fkDistribuidora = idDistribuidora;
